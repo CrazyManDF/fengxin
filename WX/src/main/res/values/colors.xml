@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="common_top_bar_blue">#22292c</color>
+	
+	<color name="tab_text_select">#FF45C01A</color>
+	<color name="tab_text_normal">#FF999999</color>
+	<color name="error_item_color">#F6EBE6</color>
+	<color name="common_bg">#fcfcfc</color>
+</resources>

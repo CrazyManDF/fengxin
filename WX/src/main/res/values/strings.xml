@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">封信</string>
+    <string name="action_settings">设置</string>
+
+    <string name="main_weixin">微信</string>
+    <string name="main_contact">通讯录</string>
+    <string name="main_find">发现</string>
+    <string name="main_me">我</string>
+
+    <string name="Registered_successfully">注册成功</string>
+    <string name="network_anomalies">网络异常，请检查网络！</string>
+    <string name="User_already_exists">用户已存在！</string>
+    <string name="registration_failed_without_permission">注册失败，无权限！</string>
+    <string name="Registration_failed">注册失败:</string>
+
+    <string name="Is_landing">正在登陆&#8230;</string>
+    <string name="Login_failed">登录失败:</string>
+    <string name="login_failure_failed">登录失败: 获取好友或群聊失败</string>
+
+    <string name="Less_than_chat_server_connection">连接不到聊天服务器</string>
+    <string name="the_current_network">当前网络不可用，请检查网络设置</string>
+    <string name="Remove_the_notification">移除通知</string>
+    <string name="em_user_remove">此用户已被移除</string>
+    <string name="Logoff_notification">下线通知</string>
+    <string name="connect_conflict">同一帐号已在其他设备登录</string>
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="prompt">提示</string>
+</resources>
