@@ -28,4 +28,8 @@
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
     <string name="prompt">提示</string>
+
+    <string name="Application_and_notify">申请与通知</string>
+    <string name="group_chat">群聊</string>
+    <string name="list_is_for">正在获取好友和群聊列表...</string>
 </resources>
