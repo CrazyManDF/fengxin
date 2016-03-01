@@ -27,12 +27,10 @@ import com.wx.app.Constant;
 import com.wx.app.R;
 import com.wx.app.WeixinApplication;
 import com.wx.app.domain.User;
-import com.wx.app.domain.UserDao;
 import com.wx.app.fx.others.LoadDataFromServer;
 import com.wx.app.fx.others.LoadDataFromServer.DataCallback;
 import com.wx.app.fx.others.LocalUserInfo;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -185,13 +183,14 @@ public class LoginActivity extends FragmentActivity {
                     // TODO 处理好友和群组,怎么运作的？？
                     EMGroupManager.getInstance().loadAllGroups();
                     EMChatManager.getInstance().loadAllConversations();
-
+                    //
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             processContactsAndGroups(json);
                         }
                     });
+
 
                     // 进入主页面
                     if (!LoginActivity.this.isFinishing()) {
@@ -261,7 +260,7 @@ public class LoginActivity extends FragmentActivity {
                 });
             }else{
                 saveMyInfo(json);
-
+                saveFriends(null);
             }
         } catch (EaseMobException e) {
             e.printStackTrace();
@@ -269,9 +268,6 @@ public class LoginActivity extends FragmentActivity {
     }
 
     private void saveFriends(JSONArray jsonArray) {
-        // TODO: 2016/1/28 保存好友信息
-        Log.d(TAG, jsonArray.toJSONString());
-
         Map<String, User>  map = new HashMap<String, User>();
         if(jsonArray != null){
             for(int i=0; i < jsonArray.size(); i++){
@@ -319,13 +315,12 @@ public class LoginActivity extends FragmentActivity {
         newFriends.setSign("");
         newFriends.setAvatar("");
         map.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
+
         // 添加"群聊"
         User groupUser = new User();
         String strGroup = getResources().getString(R.string.group_chat);
         groupUser.setUsername(Constant.GROUP_USERNAME);
         groupUser.setNick(strGroup);
-        groupUser.setHeader("");
-        groupUser.setNick(strChat);
         groupUser.setBeizhu("");
         groupUser.setFxid("");
         groupUser.setHeader("");
@@ -335,12 +330,9 @@ public class LoginActivity extends FragmentActivity {
         groupUser.setSign("");
         groupUser.setAvatar("");
         map.put(Constant.GROUP_USERNAME, groupUser);
-        // 存入内存
+
+        // 存储
         WeixinApplication.getInstance().setContactList(map);
-        // 存入db
-        UserDao userDao = new UserDao(LoginActivity.this);
-        List<User> users = new ArrayList<User>(map.values());
-        userDao.saveContactList(users);
 
         // 获取黑名单列表
         try {
@@ -350,7 +342,7 @@ public class LoginActivity extends FragmentActivity {
 
             // 获取群聊列表(群聊里只有groupid和groupname等简单信息，不包含members),
             // sdk会把群组存入到内存和db中
-            EMGroupManager.getInstance().getGroupsFromServer();
+//            EMGroupManager.getInstance().getGroupsFromServer();
 //            addContact("11223354");
 
         } catch (EaseMobException e) {

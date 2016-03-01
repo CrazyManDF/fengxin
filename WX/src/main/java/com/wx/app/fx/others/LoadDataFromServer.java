@@ -1,5 +1,21 @@
 package com.wx.app.fx.others;
 
+import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.alibaba.fastjson.JSONObject;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.CoreConnectionPNames;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -10,21 +26,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.CoreConnectionPNames;
-
-import com.alibaba.fastjson.JSONObject;
-
-import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
-import android.widget.Toast;
 import internal.org.apache.http.entity.mime.MultipartEntity;
 import internal.org.apache.http.entity.mime.content.FileBody;
 import internal.org.apache.http.entity.mime.content.StringBody;
@@ -44,7 +45,7 @@ public class LoadDataFromServer {
 
 	public void getData(final DataCallback dataCallback) {
 
-		final Handler handler = new LoadHanlder(context, dataCallback);
+		final Handler handler = new LoadHandler(context, dataCallback);
 
 		new Thread() {
 			@Override
@@ -108,12 +109,12 @@ public class LoadDataFromServer {
 		}.start();
 	}
 
-	static class LoadHanlder extends Handler {
+	static class LoadHandler extends Handler {
 
 		private DataCallback dataCallback;
 		private Context context;
 
-		public LoadHanlder(Context context, DataCallback dataCallback) {
+		public LoadHandler(Context context, DataCallback dataCallback) {
 			this.dataCallback = dataCallback;
 			this.context = context;
 		}

@@ -104,6 +104,7 @@ public class UserDao {
                 user.setSign(sign);
                 user.setTel(tel);
                 user.setAvatar(avatar);
+
                 String headerName = null;
                 if(!TextUtils.isEmpty(user.getNick())){
                     headerName = user.getNick();
@@ -113,13 +114,14 @@ public class UserDao {
 
                 if(username.equals(Constant.NEW_FRIENDS_USERNAME)
                         || username.equals(Constant.GROUP_USERNAME)){
-                    user.setHeader("");
+                    user.setHeader("");  //群聊 和 申请与通知 为空
                 }else if (Character.isDigit(headerName.charAt(0))){
-                    user.setHeader("#");
-                }else{
+                    user.setHeader("#"); //数字  为#
+                }else{  //其他为大写首字母
                     user.setHeader(HanziToPinyin.getInstance()
                             .get(headerName.substring(0,1)).get(0)
-                    .target.substring(0, 1).toUpperCase());
+                            .target.substring(0, 1).toUpperCase());
+                    // 其他特殊符号为 #
                     char header = user.getHeader().toLowerCase().charAt(0);
                     if(header < 'a' || header > 'z'){
                         user.setHeader("#");

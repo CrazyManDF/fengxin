@@ -1,10 +1,10 @@
 package com.wx.app;
 
-import com.easemob.EMCallBack;
-import com.wx.app.domain.User;
-
 import android.app.Application;
 import android.content.Context;
+
+import com.easemob.EMCallBack;
+import com.wx.app.domain.User;
 
 import java.util.Map;
 
@@ -82,10 +82,10 @@ public class WeixinApplication extends Application{
 	/**
 	 * 设置好友user list到内存中
 	 *
-	 * @param contactList
+	 * @param contactMap
 	 */
-	public void setContactList(Map<String, User> contactList) {
-		wxCache.setContactList(contactList);
+	public void setContactList(Map<String, User> contactMap) {
+		wxCache.setContactList(contactMap);
 	}
 
 }

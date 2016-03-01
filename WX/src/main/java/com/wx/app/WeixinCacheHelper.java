@@ -1,16 +1,16 @@
 package com.wx.app;
 
+import android.content.Context;
+import android.util.Log;
+
 import com.easemob.EMCallBack;
 import com.easemob.EMConnectionListener;
 import com.easemob.EMError;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.wx.app.domain.User;
-import com.wx.app.domain.UserDao;
 
-import android.content.Context;
-import android.util.Log;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +22,7 @@ public class WeixinCacheHelper {
 	private static WeixinCacheHelper cacheHelper = null;
 	protected WeixinModelHelper wxModel = null;
 
-	private Map<String, User> contactList ;
+	private Map<String, User> contactMap = null ;
 	/**
 	 * HuanXin ID in cache
 	 */
@@ -137,11 +137,15 @@ public class WeixinCacheHelper {
 	/**
 	 * 设置好友user list到内存中
 	 *
-	 * @param contactList
+	 * @param contactMap
 	 */
-	public void setContactList(Map<String, User> contactList) {
-		this.contactList = contactList;
-		// TODO: 2016/1/24 没保存到数据库
+	public void setContactList(Map<String, User> contactMap) {
+		if(contactMap != null){
+			List<User> contactList = new ArrayList<User>(contactMap.values());
+			if(wxModel.saveContactList(contactList)){
+				this.contactMap = contactMap;
+			}
+		}
 	}
 
 	/**
@@ -150,10 +154,10 @@ public class WeixinCacheHelper {
 	 * @return
 	 */
 	public Map<String, User> getContactList() {
-		if(getHXId() != null && contactList == null) {
-			contactList = getModel().getContactList();
+		if(getHXId() != null && contactMap == null) {
+			contactMap = getModel().getContactList();
 		}
-		return contactList;
+		return contactMap;
 	}
 
 	public void setPassword(String password) {

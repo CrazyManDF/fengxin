@@ -28,13 +28,14 @@ public class DBOpenHelper extends SQLiteOpenHelper {
             + UserDao.TABLE_NAME + " ("
             + UserDao.COLUMN_NAME_ID + " TEXT PRIMARY KEY,"
             + UserDao.COLUMN_NAME_NICK + " TEXT,"
-            + UserDao.COLUMN_NAME_SEX + " TEXT,"
             + UserDao.COLUMN_NAME_AVATAR + " TEXT,"
+            + UserDao.COLUMN_NAME_BEIZHU + " TEXT,"
+            + UserDao.COLUMN_NAME_SEX + " TEXT,"
             + UserDao.COLUMN_NAME_FXID + " TEXT,"
+            + UserDao.COLUMN_NAME_SIGN +" TEXT, "
             + UserDao.COLUMN_NAME_REGION + " TEXT,"
             + UserDao.COLUMN_NAME_TEL + " TEXT,"
-            + UserDao.COLUMN_NAME_BEIZHU + " TEXT,"
-            + UserDao.COLUMN_NAME_FXID + " TEXT);";
+            + UserDao.COLUMN_NAME_IS_STRANGER + " TEXT);";
 
     private static DBOpenHelper instance = null;
 

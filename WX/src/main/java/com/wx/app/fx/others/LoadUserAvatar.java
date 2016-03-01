@@ -8,8 +8,6 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.ImageView;
 
-import org.apache.http.protocol.HttpService;
-
 import java.io.InputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,6 +16,8 @@ import java.util.concurrent.Executors;
  * Created by darren foung on 2016/1/19.
  */
 public class LoadUserAvatar {
+
+    private static final String TAG = "LoadUserAvatar";
 
     private static final int MAX_THREAD_NUM = 5;
     private BitmapCache bitmapCache;
@@ -37,11 +37,11 @@ public class LoadUserAvatar {
 
         Bitmap bitmap = bitmapCache.getBitmap(imageUrl);
         if (bitmap != null){
-            Log.i("aaaa", "image exists in memory");
+            Log.i(TAG, "image exists in memory");
             return bitmap;
         }
         if(fileUtil.isBitmapExists(filename)){
-            Log.i("aaaa", "image exists in file" + filename);
+            Log.i(TAG, "image exists in file" + filename);
             bitmap = BitmapFactory.decodeFile(filepath);
             bitmapCache.putBitmap(imageUrl, bitmap);
             return bitmap;
@@ -64,7 +64,7 @@ public class LoadUserAvatar {
             Thread thread = new Thread(){
                 @Override
                 public void run() {
-                    Log.i("aaaa", Thread.currentThread().getName()
+                    Log.i(TAG, Thread.currentThread().getName()
                             + " is running");
                     // 网络加载图片
                     InputStream inputStream = HTTPService.getInstance()
