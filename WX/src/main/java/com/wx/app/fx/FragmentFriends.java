@@ -2,6 +2,7 @@ package com.wx.app.fx;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.wx.app.R;
 import com.wx.app.WeixinApplication;
 import com.wx.app.domain.User;
 import com.wx.app.fx.others.ContactAdapter;
+import com.wx.app.widget.Sidebar;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,6 +25,7 @@ import java.util.Set;
 
 public class FragmentFriends extends Fragment{
 
+	private static final String TAG = "FragmentFriends";
 	private List<User> contactList;
 	private ListView listView;
 	private List<String> blackList;
@@ -41,8 +44,8 @@ public class FragmentFriends extends Fragment{
 
 		// 黑名单列表
 		blackList = EMContactManager.getInstance().getBlackListUsernames();
-		contactList = new ArrayList<User>();
 		// 获取设置contactlist
+		contactList = new ArrayList<User>();
 		getContactList();
 
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
@@ -55,6 +58,9 @@ public class FragmentFriends extends Fragment{
 		adapter = new ContactAdapter(getActivity(), R.layout.item_contact_list,
 				contactList);
 		listView.setAdapter(adapter);
+
+		Sidebar sidebar = (Sidebar) getView().findViewById(R.id.sidebar);
+		sidebar.setListView(listView);
 	}
 
 	/*
@@ -62,7 +68,7 @@ public class FragmentFriends extends Fragment{
 	 */
 	private void getContactList() {
 		contactList.clear();
-		//TODO 获取本地好友资料
+		//获取本地好友资料
 		Map<String, User> userMap = WeixinApplication.getInstance().getContactList();
 		Set<Map.Entry<String, User>> userEntry = userMap.entrySet();
 		Iterator<Map.Entry<String, User>> iterator = userEntry.iterator();

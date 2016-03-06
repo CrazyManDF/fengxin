@@ -8,7 +8,7 @@ import com.easemob.chat.EMContact;
 public class User extends EMContact {
 
     private int unreadMsgCount;
-    private String header;
+    private String header;  //用于索引联系人名单
     private String usernick;
     private String sex;
     private String tel;
