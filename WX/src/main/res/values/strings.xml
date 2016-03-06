@@ -33,5 +33,5 @@
     <string name="group_chat">群聊</string>
     <string name="list_is_for">正在获取好友和群聊列表...</string>
 
-    <string name="search_header">搜</string>
+    <string name="size_friends_suffix">位联系人</string>
 </resources>

@@ -1,12 +1,15 @@
 package com.wx.app.fx;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.easemob.chat.EMContactManager;
 import com.wx.app.Constant;
@@ -30,6 +33,7 @@ public class FragmentFriends extends Fragment{
 	private ListView listView;
 	private List<String> blackList;
 	private ContactAdapter adapter;
+	private TextView tv_total;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,10 +58,28 @@ public class FragmentFriends extends Fragment{
 		listView.addHeaderView(headerView);
 		listView.addFooterView(footerView);
 
+		tv_total = (TextView) footerView.findViewById(R.id.tv_total);
+
 		// 设置adapter
 		adapter = new ContactAdapter(getActivity(), R.layout.item_contact_list,
 				contactList);
 		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Log.d(TAG, "position=" + position + ",size=" + contactList.size());
+				if (position != 0 && position != contactList.size() + 1) {
+					User user = contactList.get(position - 1);
+					startActivity(new Intent(getActivity(), UserInfoActivity.class)
+							.putExtra("nick", user.getNick())
+							.putExtra("avatar", user.getAvatar())
+							.putExtra("sex", user.getSex())
+							.putExtra("hxid", user.getUsername()));
+				}
+			}
+		});
+
+		tv_total.setText(String.valueOf(contactList.size()) + getString(R.string.size_friends_suffix));
 
 		Sidebar sidebar = (Sidebar) getView().findViewById(R.id.sidebar);
 		sidebar.setListView(listView);

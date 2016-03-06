@@ -1,6 +1,7 @@
 package com.wx.app.fx;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -11,9 +12,12 @@ import android.widget.TextView;
 
 import com.wx.app.Constant;
 import com.wx.app.R;
+import com.wx.app.WeixinApplication;
 import com.wx.app.fx.others.LoadUserAvatar;
 
 public class UserInfoActivity extends Activity {
+
+    private boolean isFriend = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,19 +42,30 @@ public class UserInfoActivity extends Activity {
             } else {
                 iv_sex.setVisibility(View.GONE);
             }
-            // TODO 判断是否是好友，显示发送消息
+            // 判断是否是好友，显示"发送消息"
+            if(WeixinApplication.getInstance().getContactList()
+                    .containsKey(hxid)){
+                isFriend = true;
+                btn_sendmsg.setText("发消息");
+            }
             showUserAvatar(iv_avatar, avatar);
         }
         btn_sendmsg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO 若是朋友则跳转
-                // 非朋友则添加通讯录
-                Intent intent = new Intent();
-                intent.putExtra("hxid", hxid);
-                intent.setClass(UserInfoActivity.this,
-                        AddFriendsFinalActivity.class);
-                startActivity(intent);
+                if(isFriend){
+                    Intent intent = new Intent();
+                    intent.setClass(UserInfoActivity.this, ChatActivity.class);
+                    startActivity(intent);
+                }else{
+                    // 非朋友则添加通讯录
+                    Intent intent = new Intent();
+                    intent.putExtra("hxid", hxid);
+                    intent.setClass(UserInfoActivity.this,
+                            AddFriendsFinalActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
