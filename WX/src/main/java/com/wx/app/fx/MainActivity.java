@@ -16,8 +16,11 @@ import com.wx.app.domain.InviteMessage;
 import com.wx.app.domain.User;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -69,6 +72,7 @@ public class MainActivity extends BaseActivity {
     private InviteMessgeDao inviteMessgeDao;
     private AlertDialog.Builder accountRemoveBuilder;
     private AlertDialog.Builder conflictBuilder;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,15 +135,28 @@ public class MainActivity extends BaseActivity {
 
         inviteMessgeDao = new InviteMessgeDao(MainActivity.this);
 
-        // setContactListener监听联系人的变化等
+//        IntentFilter cmdMessageIntentFilter = new IntentFilter(EMChatManager
+//                .getInstance().getCmdMessageBroadcastAction());
+//        cmdMessageIntentFilter.setPriority(3);
+//        registerReceiver(cmdMessageReceiver, cmdMessageIntentFilter);
+//
+//        NewMessageBroadcastReceiver msgReceiver = new NewMessageBroadcastReceiver();
+//        IntentFilter intentFilter = new IntentFilter(EMChatManager
+//                .getInstance().getNewMessageBroadcastAction());
+//        intentFilter.setPriority(3);
+//        registerReceiver(msgReceiver, intentFilter);
+
+        // TODO: 2016/3/7 不能收到好友请求消息消息
+//        // setContactListener监听联系人的变化等
         EMContactManager.getInstance().setContactListener(new MyContactListener());
-        // 注册一个监听连接状态的listener
+//        // 注册一个监听连接状态的listener
         EMChatManager.getInstance().addConnectionListener(new MyConnectionListener());
-        // 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
+//        // 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
         EMChat.getInstance().setAppInited();
     }
 
     private void initListener() {
+
         final AddPopWindow addPopup = new AddPopWindow(MainActivity.this);
         iv_add.setOnClickListener(new OnClickListener() {
             @Override
@@ -190,6 +207,21 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    private BroadcastReceiver cmdMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            abortBroadcast();
+        }
+    };
+
+    private class NewMessageBroadcastReceiver extends  BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "================");
+        }
+    }
+
     private class MyContactListener implements EMContactListener  {
 
         @Override
@@ -207,7 +239,6 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public void onContactInvited(String username, String reason) {
-            Log.d(TAG, "onContactInvited()=======");
             List<InviteMessage> messages = inviteMessgeDao.getMessagesList();
             for (InviteMessage msg : messages) {
                 // TODO: 2016/1/24 处理一下
@@ -221,7 +252,7 @@ public class MainActivity extends BaseActivity {
             msg.setReason(reason);
             msg.setStatus(InviteMessage.InviteMessageStatus.BEINVITED);
             msg.setTime(System.currentTimeMillis());
-            Log.d(TAG, username + "请求加你为好友,reason: " + reason);
+            Log.d(TAG, username + "请求加你==为好友,reason: " + reason);
             notifyNewInviteMessage(msg);
         }
 

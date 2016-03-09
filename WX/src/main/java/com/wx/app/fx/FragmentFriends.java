@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.easemob.chat.EMContactManager;
@@ -57,6 +58,14 @@ public class FragmentFriends extends Fragment{
 		View footerView = inflater.inflate(R.layout. item_contact_list_footer,null);
 		listView.addHeaderView(headerView);
 		listView.addFooterView(footerView);
+
+		RelativeLayout rl_newfriends = (RelativeLayout) headerView.findViewById(R.id.rl_newfriends);
+		rl_newfriends.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(getActivity(), NewFriendsActivity.class));
+			}
+		});
 
 		tv_total = (TextView) footerView.findViewById(R.id.tv_total);
 

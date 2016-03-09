@@ -6,7 +6,7 @@
     android:orientation="vertical" >
 
     <RelativeLayout
-        android:id="@+id/re_newfriends"
+        android:id="@+id/rl_newfriends"
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:background="@drawable/btn_list_item_bg"
