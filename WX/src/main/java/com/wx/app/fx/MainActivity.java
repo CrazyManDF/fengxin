@@ -34,7 +34,6 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import org.bitlet.weupnp.Main;
 
 import java.util.List;
 
