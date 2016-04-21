@@ -1,7 +1,10 @@
 package com.wx.app.adapter;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +29,7 @@ import com.wx.app.R;
  */
 public class MessageAdapter extends BaseAdapter {
 
+    private static final String TAG = "MessageAdapter";
     private String username;
     private Context context;
 
@@ -132,13 +136,16 @@ public class MessageAdapter extends BaseAdapter {
         if (message.direct == EMMessage.Direct.SEND) {
             switch (message.status) {
                 case SUCCESS: // 发送成功
+                    Log.d(TAG, "发送成功");
                     break;
                 case FAIL: // 发送失败
+                    Log.d(TAG, "发送失败");
                     break;
                 case INPROGRESS: // 发送中
+                    Log.d(TAG, "发送中");
                     break;
-                default:
-                    // 发送消息
+                default: // 未发送消息
+                    Log.d(TAG, "未发送消息");
                     sendMsgInBackground(message, holder);
             }
         }
@@ -234,4 +241,5 @@ public class MessageAdapter extends BaseAdapter {
         TextView tv_file_size;
         TextView tv_file_download_state;
     }
+
 }

@@ -3,10 +3,12 @@ package com.wx.app.fx;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -138,6 +140,14 @@ public class ChatActivity extends BaseActivity {
                 return false;
             }
         });
+
+        NewMessageBroadcastReceiver msgReceiver = new NewMessageBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter(EMChatManager
+                .getInstance().getNewMessageBroadcastAction());
+        // 设置广播的优先级别大于Mainacitivity,这样如果消息来的时候正好在chat页面，
+        // 直接显示消息，而不是提示消息未读
+//        intentFilter.setPriority(5);
+        registerReceiver(msgReceiver, intentFilter);
     }
 
     public void onClick(View view){
@@ -192,10 +202,17 @@ public class ChatActivity extends BaseActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            String username = intent.getStringExtra("from");
-            String msgid = intent.getStringExtra("msgid");
-
-
+            String msgFrom  = intent.getStringExtra("from");
+            String msgId = intent.getStringExtra("msgid");
+            //消息类型，文本，图片，语音消息等,这里返回的值为msg.type.ordinal()。
+            //所以消息type实际为是enum类型
+            int msgType = intent.getIntExtra("type", 0);
+            Log.d("main", "new message id:" + msgId + " from:" + msgFrom
+                    + " type:" + msgType);
+            // 收到这个广播的时候，message已经在db和内存里了，可以通过id获取mesage对象
+            //更方便的方法是通过msgId直接获取整个message
+            EMMessage message = EMChatManager.getInstance().getMessage(msgId);
+            messageAdapter.refresh();
         }
     }
 
