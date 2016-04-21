@@ -7,6 +7,7 @@
     android:orientation="vertical"
     tools:context="com.wx.app.fx.ChatActivity">
 
+    <!-- 顶部栏 -->
     <RelativeLayout
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
@@ -59,6 +60,7 @@
     </RelativeLayout>
 
     <ListView
+        android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -67,6 +69,7 @@
 
     </ListView>
 
+    <!-- 底部栏 -->
     <LinearLayout
         android:id="@+id/rl_bottom"
         android:layout_width="match_parent"
@@ -77,23 +80,60 @@
         android:padding="5dp"
         >
         <Button
+            android:id="@+id/btn_set_mode_voice"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/icon_chat_voice"
             android:layout_gravity="center_vertical"
             />
-        <EditText
-            android:layout_width="280dp"
+        <RelativeLayout
+            android:id="@+id/edittext_layout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            />
-        <ImageView
+            android:layout_weight="1"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+
+            >
+
+            <EditText
+                android:id="@+id/et_sendmessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="35dp"
+                android:background="@null"
+                android:minHeight="40dp"
+                />
+            <ImageView
+                android:id="@+id/iv_emoticons_normal"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/icon_chat_emoji_normal"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                />
+        </RelativeLayout>
+        <Button
+            android:id="@+id/btn_more"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/icon_chattype_add"
             android:layout_gravity="center_vertical"
+            />
+
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_width="42dp"
+            android:layout_height="32dp"
+            android:background="@drawable/chat_send_btn_selector"
+            android:layout_gravity="center_vertical"
+            android:text="@string/button_send"
+            android:textColor="#666666"
+            android:textSize="16sp"
+            android:visibility="gone"
+            android:onClick="onClick"
             />
     </LinearLayout>
 

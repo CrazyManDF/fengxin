@@ -29,10 +29,10 @@ public class UserInfoActivity extends Activity {
         ImageView iv_sex = (ImageView) this.findViewById(R.id.iv_sex);
         TextView tv_name = (TextView) this.findViewById(R.id.tv_name);
 
+        final String hxid = this.getIntent().getStringExtra("hxid");
         final String nick = this.getIntent().getStringExtra("nick");
         final String avatar = this.getIntent().getStringExtra("avatar");
         String sex = this.getIntent().getStringExtra("sex");
-        final String hxid = this.getIntent().getStringExtra("hxid");
         if (nick != null && avatar != null && sex != null && hxid != null) {
             tv_name.setText(nick);
             if (sex.equals("1")) {
@@ -56,6 +56,8 @@ public class UserInfoActivity extends Activity {
                 // TODO 若是朋友则跳转
                 if(isFriend){
                     Intent intent = new Intent();
+                    intent.putExtra("userId", hxid);
+                    intent.putExtra("userNick", nick);
                     intent.setClass(UserInfoActivity.this, ChatActivity.class);
                     startActivity(intent);
                 }else{

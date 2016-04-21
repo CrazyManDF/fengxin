@@ -34,4 +34,9 @@
     <string name="list_is_for">正在获取好友和群聊列表...</string>
 
     <string name="size_friends_suffix">位联系人</string>
+
+    <string name="button_send">发送</string>
+
+    <string name="send_fail">发送消息失败,</string>
+    <string name="connect_failuer_toast">请检查网络或稍候重试</string>
 </resources>
