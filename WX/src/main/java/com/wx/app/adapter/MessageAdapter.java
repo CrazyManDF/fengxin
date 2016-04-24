@@ -92,6 +92,17 @@ public class MessageAdapter extends BaseAdapter {
                     holder.tv = (TextView) convertView.findViewById(R.id.tv_chatcontent);
                     holder.tv_userId = (TextView) convertView.findViewById(R.id.tv_userid);
                 } catch (Exception e) {}
+            }else if (message.getType() == EMMessage.Type.VOICE) {
+                try {
+                    holder.iv = ((ImageView) convertView.findViewById(R.id.iv_voice));
+                    holder.head_iv = (ImageView) convertView.findViewById(R.id.iv_userhead);
+                    holder.tv = (TextView) convertView.findViewById(R.id.tv_length);
+                    holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
+                    holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
+                    holder.tv_userId = (TextView) convertView.findViewById(R.id.tv_userid);
+                    holder.iv_read_status = (ImageView) convertView.findViewById(R.id.iv_unread_voice);
+                } catch (Exception e) {
+                }
             }
             convertView.setTag(holder);
         }else{
@@ -106,6 +117,9 @@ public class MessageAdapter extends BaseAdapter {
                     // 语音电话
                 }
                 break;
+            case VOICE: // 语音
+                handleVoiceMessage(message, holder, position, convertView);
+                break;
         }
 
         return convertView;
@@ -114,6 +128,10 @@ public class MessageAdapter extends BaseAdapter {
 	/*创建文本消息*/
     private View createViewByMessage(EMMessage message, int position) {
         switch (message.getType()) {
+            case VOICE:
+                return message.direct == EMMessage.Direct.RECEIVE ?
+                        inflater.inflate(R.layout.row_received_voice, null)
+                        : inflater.inflate(R.layout.row_sent_voice, null);
             default:
                 return message.direct == EMMessage.Direct.RECEIVE ?
                         inflater.inflate(R.layout.row_received_message, null)

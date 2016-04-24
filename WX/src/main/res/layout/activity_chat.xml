@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="#ebebeb"
     tools:context="com.wx.app.fx.ChatActivity">
 
     <!-- 顶部栏 -->
@@ -12,8 +12,9 @@
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_top_bar"
-        android:layout_weight="0"
-        android:background="@color/common_top_bar_blue" >
+        android:background="@color/common_top_bar_blue"
+        android:layout_alignParentTop="true"
+        >
 
         <ImageView
             android:id="@+id/iv_back"
@@ -59,33 +60,68 @@
             android:src="@drawable/icon_single_setting" />
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/list"
+    <!-- 底部栏 -->
+    <LinearLayout
+        android:id="@+id/bar_bottom"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/common_bg"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
         >
 
-    </ListView>
-
-    <!-- 底部栏 -->
     <LinearLayout
         android:id="@+id/rl_bottom"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
-        android:layout_weight="0"
         android:background="@android:color/white"
         android:padding="5dp"
+        android:gravity="center_vertical"
         >
         <Button
             android:id="@+id/btn_set_mode_voice"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="6dp"
             android:background="@drawable/icon_chat_voice"
             android:layout_gravity="center_vertical"
+            android:onClick="setModeVoice"
+            android:visibility="visible"
             />
+
+        <Button
+            android:id="@+id/btn_set_mode_keyboard"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="6dp"
+            android:background="@drawable/chatting_setmode_keyboard_btn"
+            android:onClick="setModeKeyboard"
+            android:visibility="gone"
+            />
+
+        <LinearLayout
+            android:id="@+id/btn_press_to_speak"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/chat_press_speak_btn"
+            android:gravity="center"
+            android:visibility="gone"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_pushtotalk"
+                android:textColor="#666666"
+                android:textSize="16sp"
+                />
+        </LinearLayout>
+
         <RelativeLayout
             android:id="@+id/edittext_layout"
             android:layout_width="0dp"
@@ -137,4 +173,54 @@
             />
     </LinearLayout>
 
-</LinearLayout>
+    </LinearLayout>
+
+    <!-- 聊天界面 -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bar_bottom"
+        android:layout_below="@id/top_bar" >
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/common_bg"
+            >
+        </ListView>
+
+        <!-- 录音 -->
+        <RelativeLayout
+            android:id="@+id/recording_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/recording_hint_bg"
+            android:padding="10dp"
+            android:visibility="invisible"
+            >
+            <ImageView
+                android:id="@+id/mic_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/record_animate_01"
+                android:layout_centerHorizontal="true"
+                />
+            <TextView
+                android:id="@+id/recording_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/mic_image"
+                android:text="@string/move_up_to_cancel"
+                android:textSize="10sp"
+                android:layout_marginTop="5dp"
+                android:padding="2dp"
+                android:layout_centerHorizontal="true"
+                />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>
