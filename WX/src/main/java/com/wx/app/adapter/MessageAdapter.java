@@ -19,10 +19,13 @@ import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
+import com.easemob.chat.FileMessageBody;
 import com.easemob.chat.TextMessageBody;
+import com.easemob.chat.VoiceMessageBody;
 import com.easemob.exceptions.EaseMobException;
 import com.wx.app.Constant;
 import com.wx.app.R;
+import com.wx.app.fx.ChatActivity;
 
 /**
  * Created by darren foung on 2016/4/20.
@@ -175,6 +178,10 @@ public class MessageAdapter extends BaseAdapter {
      * @param holder
      */
     public void sendMsgInBackground(final EMMessage message, final ViewHolder holder) {
+
+//        holder.staus_iv.setVisibility(View.GONE);
+//        holder.pb.setVisibility(View.VISIBLE);
+
         // 调用sdk发送异步发送方法
         EMChatManager.getInstance().sendMessage(message, new EMCallBack(){
 
@@ -230,6 +237,100 @@ public class MessageAdapter extends BaseAdapter {
             }
         });
     }
+
+    /**
+     * 语音消息
+     *
+     * @param message
+     * @param holder
+     * @param position
+     * @param convertView
+     */
+    private void handleVoiceMessage(final EMMessage message, final ViewHolder holder,
+                                    final int position, View convertView) {
+        VoiceMessageBody voiceBody = (VoiceMessageBody) message.getBody();
+        holder.tv.setText(voiceBody.getLength() + "\"");
+        holder.iv.setOnClickListener(new VoicePlayClickListener(message,
+                holder.iv, holder.iv_read_status, this, activity, username));
+
+        if(((ChatActivity)activity).playMsgId != null
+                && ((ChatActivity) activity).playMsgId.equals(message.getMsgId())
+                && VoicePlayClickListener.isPlaying){
+            //正在播放当前语音消息
+
+        }else {
+            if (message.direct == EMMessage.Direct.RECEIVE) {
+                holder.iv.setImageResource(R.drawable.chatfrom_voice_playing);
+            } else {
+                holder.iv.setImageResource(R.drawable.chatto_voice_playing);
+            }
+        }
+
+        //处理收到的语音
+        if (message.direct == EMMessage.Direct.RECEIVE) {
+            if (message.isListened()) {
+                // 隐藏语音未听标志
+                holder.iv_read_status.setVisibility(View.INVISIBLE);
+            } else {
+                holder.iv_read_status.setVisibility(View.VISIBLE);
+            }
+
+            if (message.status == EMMessage.Status.INPROGRESS) {
+                holder.pb.setVisibility(View.VISIBLE);
+                System.err.println("!!!! back receive");
+                ((FileMessageBody) message.getBody()).setDownloadCallback(new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                holder.pb.setVisibility(View.INVISIBLE);
+                                notifyDataSetChanged();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(int i, String s) {
+                        activity.runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                holder.pb.setVisibility(View.INVISIBLE);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onProgress(int i, String s) {
+
+                    }
+                });
+            }else{
+                holder.pb.setVisibility(View.INVISIBLE);
+            }
+            //return;
+        }
+
+        // until here, deal with send voice msg
+        switch (message.status) {
+            case SUCCESS:
+                holder.pb.setVisibility(View.GONE);
+                holder.staus_iv.setVisibility(View.GONE);
+                break;
+            case FAIL:
+                holder.pb.setVisibility(View.GONE);
+                holder.staus_iv.setVisibility(View.VISIBLE);
+                break;
+            case INPROGRESS:
+                holder.pb.setVisibility(View.VISIBLE);
+                holder.staus_iv.setVisibility(View.GONE);
+                break;
+            default:
+                sendMsgInBackground(message, holder);
+        }
+    }
+
     /**
      * 刷新页面
      */

@@ -64,6 +64,7 @@ public class ChatActivity extends BaseActivity {
     private View recordingContainer;
     private TextView recordingHint;
     private Drawable[] micImages;
+    public String playMsgId; // 不知道哪里修改这个值
 
     private Handler micImageHandler = new Handler(){
         @Override
