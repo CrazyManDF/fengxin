@@ -81,6 +81,8 @@ public class MessageAdapter extends BaseAdapter {
 
         // TODO: 2016/4/21
 
+        Log.d(TAG,message.getFrom()+"--getFrom-");
+
         ViewHolder holder;
         if(convertView == null){
             holder = new ViewHolder();
@@ -88,6 +90,7 @@ public class MessageAdapter extends BaseAdapter {
 
             if (message.getType() == EMMessage.Type.TXT) {
                 try {
+                    Log.d(TAG, "=9999TXT==");
 //                    holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
 //                    holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
                     holder.head_iv = (ImageView) convertView.findViewById(R.id.iv_userhead);
@@ -97,15 +100,15 @@ public class MessageAdapter extends BaseAdapter {
                 } catch (Exception e) {}
             }else if (message.getType() == EMMessage.Type.VOICE) {
                 try {
+                    Log.d(TAG, "=9999VOICE==");
                     holder.iv = ((ImageView) convertView.findViewById(R.id.iv_voice));
+                    holder.iv_read_status = (ImageView) convertView.findViewById(R.id.iv_unread_voice);
                     holder.head_iv = (ImageView) convertView.findViewById(R.id.iv_userhead);
                     holder.tv = (TextView) convertView.findViewById(R.id.tv_length);
                     holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
                     holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
                     holder.tv_userId = (TextView) convertView.findViewById(R.id.tv_userid);
-                    holder.iv_read_status = (ImageView) convertView.findViewById(R.id.iv_unread_voice);
-                } catch (Exception e) {
-                }
+                } catch (Exception e) { }
             }
             convertView.setTag(holder);
         }else{
@@ -128,7 +131,7 @@ public class MessageAdapter extends BaseAdapter {
         return convertView;
     }
 
-	/*创建文本消息*/
+	/*创建消息布局*/
     private View createViewByMessage(EMMessage message, int position) {
         switch (message.getType()) {
             case VOICE:
@@ -157,13 +160,11 @@ public class MessageAdapter extends BaseAdapter {
         if (message.direct == EMMessage.Direct.SEND) {
             switch (message.status) {
                 case SUCCESS: // 发送成功
-                    Log.d(TAG, "发送成功");
                     break;
                 case FAIL: // 发送失败
-                    Log.d(TAG, "发送失败");
+
                     break;
                 case INPROGRESS: // 发送中
-                    Log.d(TAG, "发送中");
                     break;
                 default: // 未发送消息
                     Log.d(TAG, "未发送消息");
@@ -182,22 +183,24 @@ public class MessageAdapter extends BaseAdapter {
 //        holder.staus_iv.setVisibility(View.GONE);
 //        holder.pb.setVisibility(View.VISIBLE);
 
-        // 调用sdk发送异步发送方法
+        // 调用sdk发送  异步发送方法
         EMChatManager.getInstance().sendMessage(message, new EMCallBack(){
 
             @Override
             public void onSuccess() {
+                Log.d(TAG, "发送成功");
                 updateSendedView(message, holder);
             }
 
             @Override
-            public void onError(int i, String s) {
+            public void onError(int code, String error) {
+                Log.d(TAG, "发送失败");
                 updateSendedView(message, holder);
             }
 
             @Override
-            public void onProgress(int i, String s) {
-
+            public void onProgress(int progress, String status) {
+                Log.d(TAG, "发送中");
             }
         });
     }
@@ -209,9 +212,11 @@ public class MessageAdapter extends BaseAdapter {
      * @param holder
      */
     private void updateSendedView(final EMMessage message, final ViewHolder holder) {
+
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                Log.d(TAG, message.status+"--");
                 if (message.status == EMMessage.Status.SUCCESS) {
                     // if (message.getType() == EMMessage.Type.FILE) {
                     // holder.pb.setVisibility(View.INVISIBLE);
@@ -250,6 +255,7 @@ public class MessageAdapter extends BaseAdapter {
                                     final int position, View convertView) {
         VoiceMessageBody voiceBody = (VoiceMessageBody) message.getBody();
         holder.tv.setText(voiceBody.getLength() + "\"");
+        Log.d(TAG,""+holder.iv+",,"+holder.iv_read_status+",,"+username);
         holder.iv.setOnClickListener(new VoicePlayClickListener(message,
                 holder.iv, holder.iv_read_status, this, activity, username));
 
