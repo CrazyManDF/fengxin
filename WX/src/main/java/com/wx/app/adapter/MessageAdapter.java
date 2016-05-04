@@ -1,9 +1,8 @@
 package com.wx.app.adapter;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +30,11 @@ import com.wx.app.fx.ChatActivity;
  * Created by darren foung on 2016/4/20.
  */
 public class MessageAdapter extends BaseAdapter {
+
+    private static final int MESSAGE_TYPE_RECV_TXT = 0;
+    private static final int MESSAGE_TYPE_SENT_TXT = 1;
+    private static final int MESSAGE_TYPE_SENT_VOICE = 2;
+    private static final int MESSAGE_TYPE_RECV_VOICE = 3;
 
     private static final String TAG = "MessageAdapter";
     private String username;
@@ -62,6 +66,25 @@ public class MessageAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 4;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        EMMessage message = getItem(position);
+        if (message.getType() == EMMessage.Type.TXT) {
+            return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_TXT
+                    : MESSAGE_TYPE_SENT_TXT;
+        }
+        if (message.getType() == EMMessage.Type.VOICE) {
+            return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VOICE
+                    : MESSAGE_TYPE_SENT_VOICE;
+        }
+        return -1;
     }
 
     @Override
@@ -263,6 +286,14 @@ public class MessageAdapter extends BaseAdapter {
                 && ((ChatActivity) activity).playMsgId.equals(message.getMsgId())
                 && VoicePlayClickListener.isPlaying){
             //正在播放当前语音消息
+            Log.d(TAG, "正在播放当前语音消息");
+//            if (message.direct == EMMessage.Direct.RECEIVE) {
+//                holder.iv.setImageResource(R.drawable.voice_from_icon);
+//            } else {
+//                holder.iv.setImageResource(R.drawable.voice_to_icon);
+//            }
+//            AnimationDrawable voiceAnimation = (AnimationDrawable) holder.iv.getDrawable();
+//            voiceAnimation.start();
 
         }else {
             if (message.direct == EMMessage.Direct.RECEIVE) {
@@ -315,7 +346,7 @@ public class MessageAdapter extends BaseAdapter {
             }else{
                 holder.pb.setVisibility(View.INVISIBLE);
             }
-            //return;
+            return; // 返回，下面是发送的设置
         }
 
         // until here, deal with send voice msg

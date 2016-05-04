@@ -64,7 +64,7 @@ public class ChatActivity extends BaseActivity {
     private View recordingContainer;
     private TextView recordingHint;
     private Drawable[] micImages;
-    public String playMsgId; // 不知道哪里修改这个值
+    public String playMsgId; // VoicePlayClickListener 中修改
 
     private Handler micImageHandler = new Handler(){
         @Override
@@ -362,6 +362,7 @@ public class ChatActivity extends BaseActivity {
 
                                 Log.d(TAG,voiceRecorder.getVoiceFilePath()+"=="
                                         +voiceRecorder.getVoiceFileName(toChatUsername));
+
                                 sendVoice(voiceRecorder.getVoiceFilePath(),
                                         voiceRecorder.getVoiceFileName(toChatUsername),
                                         Integer.toString(length), false);
